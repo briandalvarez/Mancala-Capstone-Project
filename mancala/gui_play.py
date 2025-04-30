@@ -1,11 +1,12 @@
 import pygame
+import math
 import sys
 
 pygame.init()
 # Load custom font
-PIXEL_FONT = pygame.font.Font("PIXEL_FONT.ttf", 72)
-PIXEL_FONT2 = pygame.font.Font("PIXEL_FONT.ttf", 50)
-PIXEL_FONT3 = pygame.font.Font("PIXEL_FONT.ttf", 40)
+PIXEL_FONT = pygame.font.Font("assets/PIXEL_FONT.ttf", 72)
+PIXEL_FONT2 = pygame.font.Font("assets/PIXEL_FONT.ttf", 50)
+PIXEL_FONT3 = pygame.font.Font("assets/PIXEL_FONT.ttf", 40)
 
 # Set up window size
 WIDTH, HEIGHT = 1600, 970
@@ -14,12 +15,12 @@ pygame.display.set_caption("Space Mancala")
 
 ### FOR LOADING IMAGES ###
 # Load background image
-BG = pygame.image.load("spacebackground.jpeg")
+BG = pygame.image.load("images/spacebackground.jpeg")
 # Load board image
-BOARD = pygame.image.load("mancalaboard.png").convert_alpha()
+BOARD = pygame.image.load("images/mancalaboard.png").convert_alpha()
 # Load scoreboard images
-ACTIVE_SCOREBOARD = pygame.image.load("active_player.png")
-INACTIVE_SCOREBOARD = pygame.image.load("inactive_player.png")
+ACTIVE_SCOREBOARD = pygame.image.load("images/active_player.png")
+INACTIVE_SCOREBOARD = pygame.image.load("images/inactive_player.png")
 
 ### FOR RE-SIZING ###
 # Re-sizes the background image
@@ -57,21 +58,32 @@ stone_count_positions = {
 player_scoreboard_pos = (1232, 750)
 ai_scoreboard_pos = (-30, 50)
 
-### For Gameplay Variables  ###
+### FOR BUTTONS ###
+# Buttons that will allow player to input which pit they would like to move their stones from on their side
+pit_buttons = {
+    0: {"center": (board_x + 323, board_y + 595), "radius": 65},
+    1: {"center": (board_x + 487, board_y + 595), "radius": 65},
+    2: {"center": (board_x + 645, board_y + 595), "radius": 65},
+    3: {"center": (board_x + 805, board_y + 595), "radius": 65},
+    4: {"center": (board_x + 976, board_y + 595), "radius": 65},
+    5: {"center": (board_x + 1145, board_y + 595), "radius": 65},
+}
+
+### FOR GAMEPLAY VARIABLES  ###
 # Initialize with four stones per pit; to be changed later with actual values
 stone_count = 4
-# Initialize player and AI scores to 0 for now; this represents the stone counts of each player's stores
+# Initialize player and AI scores to 0 for now; this represents the stone counts of each player's stores; to be changed later with actual values
 player_score = 0
 ai_score = 0
 
 
 # Draw to screen
 def draw():
-    ### For Background ###
+    ### FOR DRAWING BACKGROUND ###
     WIN.blit(BG, (0, 0))
     WIN.blit(BOARD, (board_x, board_y))
 
-    ### For Pit Stone Counts ###
+    ### FOR DRAWING PIT STONE COUNTS ###
     for pit_index, (x, y) in stone_count_positions.items():
         # Render number of stones for corresponding pit
         text_surface = PIXEL_FONT.render(str(stone_count), True, (255, 255, 255))
@@ -80,7 +92,7 @@ def draw():
         # Draw text for number to the screen
         WIN.blit(text_surface, text_rect)
 
-    ### For Scoreboards ###
+    ### FOR DRAWING SCOREBOARDS ###
     # Display Scoreboards
     WIN.blit(ACTIVE_SCOREBOARD, player_scoreboard_pos)
     WIN.blit(INACTIVE_SCOREBOARD, ai_scoreboard_pos)
@@ -111,6 +123,11 @@ def draw():
     )
     WIN.blit(ai_score_text, ai_score_rect)
 
+    ### FOR DRAWING PIT BUTTONS ###
+    # Draw button over each Mancala board pit
+    for button in pit_buttons.values():
+        pygame.draw.circle(WIN, (255, 0, 0), button["center"], button["radius"])
+
     pygame.display.update()
 
 
@@ -123,6 +140,24 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
                 break
+
+            # Handles mouse clicks
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                # Get current mouse position
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+
+                # Loop through each clickable pit button
+                for pit_index, button in pit_buttons.items():
+                    # Horizontal distance from center
+                    dx = mouse_x - button["center"][0]
+                    # Vertical distance from center
+                    dy = mouse_y - button["center"][1]
+
+                    # Circle collision formula to determine if a click is inside the circle:
+                    # (dx^2 + dy^2) <= radius^2
+                    if dx * dx + dy * dy <= button["radius"] * button["radius"]:
+                        # Insert code for processing player's move here
+                        pass
         draw()
 
     pygame.quit()
