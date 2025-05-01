@@ -95,10 +95,12 @@ class Board(object):
     def _earned_free_move(self, player_num, last_area):
         """ Checks whether a free move was earned. """
         if player_num == 1 and last_area == P1_STORE:
-            print("Earned free move!")
+            # TODO - remove comment - used for debugging tests
+            # print("Earned free move!")
             return True
         elif player_num == 2 and last_area == P2_STORE:
-            print("Earned free move!")
+            # TODO - remove comment - used for debugging tests
+            # print("Earned free move!")
             return True
         else:
             return False
@@ -147,7 +149,8 @@ class Board(object):
             last_area, last_index)
 
         captured_stones = self.board[opposing_area][opposing_index]
-        print("%d stones captured!" % captured_stones)
+        # TODO - remove comment - used for debugging tests
+        # print("%d stones captured!" % captured_stones)
 
         # Clear the two pits
         self.board[last_area][last_index] = 0
@@ -228,3 +231,18 @@ class Board(object):
     def get_scores(self):
         """ Returns both scores as a tuple. """
         return (self.board[1][0], self.board[3][0])
+
+    def legal_moves(self, player_num):
+        """
+        Returns a list of legal pit indices (0–5) for the given player.
+        A move is legal if the corresponding pit contains one or more stones.
+        """
+        if player_num == 1:
+            # Player 1's pits are in row 0 (top row of the board)
+            return [i for i in range(6) if self.board[0][i] > 0]
+        elif player_num == 2:
+            # Player 2's pits are in row 2 (bottom row of the board)
+            return [i for i in range(6) if self.board[2][i] > 0]
+        else:
+            # Invalid player number (should only be 1 or 2)
+            return []
