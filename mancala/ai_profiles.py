@@ -4,12 +4,13 @@ from random import choice
 
 from mancala.mancala import Player, reverse_index
 from mancala.constants import AI_NAME, P1_PITS, P2_PITS
+import time
 
 class AIPlayer(Player):
     """ Base class for an AI Player """
-    def __init__(self, number, board, name=AI_NAME):
+    def __init__(self, gui, number, board, name=AI_NAME):
         """ Initializes an AI profile. """
-        super(AIPlayer, self).__init__(number, board, name)
+        super(AIPlayer, self).__init__(gui, number, board, name)
 
     @property
     def pits(self):
@@ -47,7 +48,9 @@ class AIPlayer(Player):
     def _think(self):
         """ Slight delay for thinking. """
         import time
-        print("AI is thinking...")
+        #GUI display
+        self.gameGUI.update_display("AI is thinking...")
+        #print("AI is thinking...")
         time.sleep(3)
 
 class RandomAI(AIPlayer):
@@ -74,13 +77,22 @@ class VectorAI(AIPlayer):
         for i in reverse_indices:
             if self.eligible_free_turns[i] == 1:
                 if self.pits[i] == reverse_index(i) + 1:
-                    print("VectorAI, mode 1, playing: ", str(i))
+                    #GUI display
+                    self.gameGUI.update_display("VectorAI, mode 1, playing: " + str(i))
+                    time.sleep(3)
+                    #print("VectorAI, mode 1, playing: ", str(i))
                     return i
         # Then clear out inefficient pits.
         for i in reverse_indices:
             if self.pits[i] > reverse_index(i) + 1:
-                print("VectorAI, mode 2, playing: ", str(i))
+                #GUI display
+                self.gameGUI.update_display("VectorAI, mode 2, playing: " + str(i))
+                time.sleep(3)
+                #print("VectorAI, mode 2, playing: ", str(i))
                 return i
         # Finally, select a random eligible move.
-        print("VectorAI, mode 3, playing an eligible move.")
+        #GUI display
+        self.gameGUI.update_display("VectorAI, mode 3, playing an eligible move.")
+        time.sleep(3)
+        #print("VectorAI, mode 3, playing an eligible move.")
         return choice(self.eligible_moves)

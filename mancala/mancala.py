@@ -2,15 +2,20 @@
 
 from mancala.constants import DEFAULT_NAME, P1_PITS, P2_PITS, P1_STORE, P2_STORE
 from mancala.board import Board, InvalidMove
+import time
+
+#For testing purposes only!!!
+import random
 
 
 class Player(object):
     """A player of Mancala."""
 
-    def __init__(self, number=None, board=None, name=DEFAULT_NAME):
+    def __init__(self, gui, number=None, board=None, name=DEFAULT_NAME):
         self.name = name
         self.number = number
         self.board = board
+        self.gameGUI = gui
 
     def __str__(self):
         return "Player: %s" % self.name
@@ -27,19 +32,31 @@ class Match(object):
 
     """
 
-    def __init__(self, player1_type=Player, player2_type=Player):
+    def __init__(self, gui, player1_type=Player, player2_type=Player):
         """Initializes a new match."""
-        self.board = Board()
-        self.players = [player1_type(1, self.board), player2_type(2, self.board)]
-        self.player1 = self.players[0]
-        self.player2 = self.players[1]
+        self.gameGUI = gui
+        self.board = Board(self.gameGUI)
+        self.players = [player1_type(self.gameGUI, 1, self.board), player2_type(self.gameGUI, 2, self.board)]
+        self.player1 = self.players[0] #Player1 must always be human
+        self.player2 = self.players[1]  #Player2 must always be AI
         self.current_turn = self.player1
 
-    def handle_next_move(self):
+    def handle_next_move(self, move=0):
         """Shows board and handles next move."""
-        print(self.board.textify_board())
+        #self.board.textify_board()
+        self.gameGUI.update_scoreboard(self.board.board_array())
 
-        next_move = self.current_turn.get_next_move()
+        if self.current_turn == self.player1: # Human
+            self.gameGUI.update_display("Please select your next move (1 to 6)!")
+            next_move = move
+            print(f"Human move was {next_move}")
+
+
+        elif self.current_turn == self.player2: # AI
+            next_move = self.current_turn.get_next_move()
+            print(f"AI move was {next_move}")
+
+
         try:
             self.board.board, free_move_earned = self.board._move_stones(
                 self.current_turn.number, next_move
@@ -51,7 +68,9 @@ class Match(object):
 
                 sys.exit()
             if self.current_turn.__class__ == HumanPlayer:
-                print("Please select a move with stones you can move.")
+                #Displays in GUI
+                self.gameGUI.update_display("Please select a move with stones you can move.")
+                #print("Please select a move with stones you can move.")
             self.handle_next_move()
 
         # Check whether game was won.
@@ -62,25 +81,38 @@ class Match(object):
 
         # Check whether free move was earned
         if free_move_earned:
-            self.handle_next_move()
+            if self.current_turn == self.player1: # Human
+                return
+            elif self.current_turn == self.player2: # AI
+                self.handle_next_move()
         else:
-            self._swap_current_turn()
-            self.handle_next_move()
+            if self.current_turn == self.player1: # Human
+                self.gameGUI.isButtonsActvive = False
+                self.gameGUI.update_buttons()
+                self._swap_current_turn()
+                self.handle_next_move()
+            elif self.current_turn == self.player2: # AI
+                self.gameGUI.isButtonsActvive = True
+                self._swap_current_turn()
+                return
+                
 
     def _swap_current_turn(self):
         """Swaps current turn to the other player."""
         if self.current_turn == self.player1:
             self.current_turn = self.player2
+            print("It is now AI's turn!")
             return self.player2
         else:
             self.current_turn = self.player1
+            print("It is now the Human's turn!")
             return self.player1
 
     def _check_for_winner(self):
         """Checks for winner. Announces the win."""
         if set(self.board.board[P1_PITS]) == set([0]):
             self.board.board = self.board.gather_remaining(self.player2.number)
-            print(
+            '''print(
                 "Player 1 finished! %s: %d to %s: %d"
                 % (
                     self.player1.name,
@@ -88,11 +120,19 @@ class Match(object):
                     self.player2.name,
                     self.board.board[P2_STORE][0],
                 )
-            )
+            )'''
+            #Displays in GUI
+            self.GameGUI.update_display("Player 2 finished! %s: %d to %s: %d"
+            % (
+                self.player1.name,
+                self.board.board[P1_STORE][0],
+                self.player2.name,
+                self.board.board[P2_STORE][0],
+            ))
             return True
         elif set(self.board.board[P2_PITS]) == set([0]):
             self.board.board = self.board.gather_remaining(self.player1.number)
-            print(
+            '''print(
                 "Player 2 finished! %s: %d to %s: %d"
                 % (
                     self.player1.name,
@@ -100,7 +140,15 @@ class Match(object):
                     self.player2.name,
                     self.board.board[P2_STORE][0],
                 )
-            )
+            )'''
+            #Displays in GUI
+            self.GameGUI.update_display("Player 2 finished! %s: %d to %s: %d"
+                % (
+                    self.player1.name,
+                    self.board.board[P1_STORE][0],
+                    self.player2.name,
+                    self.board.board[P2_STORE][0],
+                ))
             return True
         else:
             return False
@@ -109,21 +157,24 @@ class Match(object):
 class HumanPlayer(Player):
     """A human player."""
 
-    def __init__(self, number, board, name=None):
-        super(HumanPlayer, self).__init__(number, board)
+    def __init__(self, gui, number, board, name=None):
+        super(HumanPlayer, self).__init__(gui, number, board)
         if name:
             self.name = name
         else:
             self.name = self.get_human_name()
 
     def get_human_name(self):
-        """Asks human players to specify their name."""
-        return input("Please input your name: ")
+        """Gets inputted player name from GUI"""
+        return self.gameGUI.get_playername()
 
-    def get_next_move(self):
+    '''def get_next_move(self):
         """Gets next move from a human player."""
-        value = int(input("Please input your next move (1 to 6): "))
-        return value - 1
+        #Display prompt
+        self.gameGUI.set_display_text("Please select your next move (1 to 6)!")
+        #value = int(input("Please input your next move (1 to 6): "))
+        value = random.randint(1, 6)
+        return value - 1'''
 
 
 def reverse_index(index):
