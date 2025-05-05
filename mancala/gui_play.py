@@ -286,8 +286,8 @@ def main():
                     if GameGUI.enter_button.collidepoint(event.pos):
                         GameGUI.set_playername()
                         game_state = 'game'
-                        #match = Match(GameGUI, HumanPlayer, MinimaxAI)
-                        match = Match(GameGUI, HumanPlayer, VectorAI)
+                        match = Match(GameGUI, HumanPlayer, MinimaxAI)
+                        #match = Match(GameGUI, HumanPlayer, VectorAI)
                         #match.handle_next_move()
                     
 

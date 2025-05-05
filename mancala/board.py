@@ -14,7 +14,7 @@ class InvalidMove(Exception):
 class Board(object):
     """ A Mancala board with size pockets per player and stones """
 
-    def __init__(self, gui, pits=6, stones=4, test_state=None):
+    def __init__(self, gui=None, pits=6, stones=4, test_state=None):
         self.gameGUI = gui
         if test_state:
             self.board = test_state
@@ -29,7 +29,8 @@ class Board(object):
         """
         newBoard = [self.board[0][0], self.board[0][1], self.board[0][2], self.board[0][3], self.board[0][4], self.board[0][5], self.board[1][0],
         self.board[2][0], self.board[2][1], self.board[2][2], self.board[2][3], self.board[2][4], self.board[2][5], self.board[3][0]]
-        self.gameGUI.update_scoreboard(newBoard)
+        if self.gameGUI:
+            self.gameGUI.update_scoreboard(newBoard)
 
         return None
 
@@ -101,13 +102,15 @@ class Board(object):
         """ Checks whether a free move was earned. """
         if player_num == 1 and last_area == P1_STORE:
             #Display on GUI
-            self.gameGUI.update_display("Earned free move!")
+            if self.gameGUI:
+                self.gameGUI.update_display("Earned free move!")
             time.sleep(3)
             #print("Earned free move!")
             return True
         elif player_num == 2 and last_area == P2_STORE:
             #Display on GUI
-            self.gameGUI.update_display("Earned free move!")
+            if self.gameGUI:
+                self.gameGUI.update_display("Earned free move!")
             time.sleep(3)
             #print("Earned free move!")
             return True
@@ -159,7 +162,8 @@ class Board(object):
 
         captured_stones = self.board[opposing_area][opposing_index]
         #Display on GUI
-        self.gameGUI.update_display("%d stones captured!" % captured_stones)
+        if self.gameGUI:
+            self.gameGUI.update_display("%d stones captured!" % captured_stones)
         time.sleep(3)
         #print("%d stones captured!" % captured_stones)
 
@@ -257,3 +261,16 @@ class Board(object):
         else:
             # Invalid player number (should only be 1 or 2)
             return []
+
+    def clone(self, include_gui=False):
+        """
+        Creates a deep copy of the board. GUI is only copied if include_gui is True.
+        """
+        cloned_gui = self.gameGUI if include_gui else None
+        new_board = Board(gui=cloned_gui)
+        new_board.board = [row[:] for row in self.board]  # Deep copy pits
+        new_board.current_player = getattr(self, 'current_player', None)
+        if hasattr(self, 'store'):
+            new_board.store = self.store[:]
+        return new_board
+

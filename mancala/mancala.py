@@ -46,16 +46,36 @@ class Match(object):
         #self.board.textify_board()
         self.gameGUI.update_scoreboard(self.board.board_array())
 
-        if self.current_turn == self.player1: # Human
-            self.gameGUI.update_display("Please select your next move (1 to 6)!")
+        # Human logic
+        if self.current_turn == self.player1:
+            # Prevent invalid move (clicking on an empty pit)
+            if self.board.board[0][move] == 0:
+                if self.gameGUI:
+                    self.gameGUI.update_display("That pit is empty. Try another one.")
+                return
+
             next_move = move
             print(f"Human move was {next_move}")
+            if self.gameGUI:
+                self.gameGUI.update_display("Please select your next move (1 to 6)!")
 
-
-        elif self.current_turn == self.player2: # AI
-            next_move = self.current_turn.get_next_move()
+        # AI logic
+        # Ensures AI never tries to play an empty pit. Prevents crashing due to invalid moves.
+        elif self.current_turn == self.player2:  # AI
+            while True:
+                next_move = self.current_turn.get_next_move()
+                if self.board.board[2][next_move] > 0:
+                    break  # Valid move
+                else:
+                    print(f"AI selected empty pit {next_move}. Retrying...")
             print(f"AI move was {next_move}")
 
+            # Sanity check: Ensure AI's move is not from an empty pit
+            if self.board.board[2][next_move] == 0:
+                if self.gameGUI:
+                    self.gameGUI.update_display("AI attempted an invalid move. Skipping.")
+                return  # Or handle with fail-safe logic if needed
+        free_move_earned = False  # Always initialize this to prevent UnboundLocalError
 
         try:
             self.board.board, free_move_earned = self.board._move_stones(
@@ -67,11 +87,12 @@ class Match(object):
                 import sys
 
                 sys.exit()
-            if self.current_turn.__class__ == HumanPlayer:
-                #Displays in GUI
-                self.gameGUI.update_display("Please select a move with stones you can move.")
-                #print("Please select a move with stones you can move.")
-            self.handle_next_move()
+            if isinstance(self.current_turn, HumanPlayer):
+                if self.gameGUI:
+                    self.gameGUI.update_display("Invalid move. Please choose a pit with stones.")
+            # Early return to avoid duplicate recursive execution
+            return
+
 
         # Check whether game was won.
         if self._check_for_winner():
@@ -122,7 +143,7 @@ class Match(object):
                 )
             )'''
             #Displays in GUI
-            self.GameGUI.update_display("Player 2 finished! %s: %d to %s: %d"
+            self.gameGUI.update_display("Player 2 finished! %s: %d to %s: %d"
             % (
                 self.player1.name,
                 self.board.board[P1_STORE][0],
@@ -142,7 +163,7 @@ class Match(object):
                 )
             )'''
             #Displays in GUI
-            self.GameGUI.update_display("Player 2 finished! %s: %d to %s: %d"
+            self.gameGUI.update_display("Player 2 finished! %s: %d to %s: %d"
                 % (
                     self.player1.name,
                     self.board.board[P1_STORE][0],

@@ -4,7 +4,7 @@ from mancala.constants import P1_PITS, P2_PITS
 
 def simulate_game(player1, player2, depth=4):
     # Initialize game state and both players
-    board = Board()
+    board = Board(gui=None)
     p1 = player1(1, board) if callable(player1) else player1
     p2 = player2(2, board) if callable(player2) else player2
 
@@ -63,6 +63,6 @@ def simulate_game(player1, player2, depth=4):
 # Run a single match between Minimax and VectorAI
 if __name__ == "__main__":
     simulate_game(
-        lambda n, b: MinimaxAI(n, b, depth=6),  # Player 1: MinimaxAI with depth 6
-        lambda n, b: VectorAI(n, b)             # Player 2: VectorAI
+        lambda n, b: MinimaxAI(None, n, b, depth=6),  # Player 1: MinimaxAI with depth 6
+        lambda n, b: VectorAI(None, n, b)             # Player 2: VectorAI
     )
