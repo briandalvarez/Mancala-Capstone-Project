@@ -173,15 +173,27 @@ def minimax(board, depth, maximizing_player, player_num):
 
 # MinimaxAI wrapper:
 # Uses the minimax algorithm to determine and return the best next move.
-class MinimaxAI:
-    def __init__(self, number, board, depth=4):
-        self.number = number
-        self.board = board
+class MinimaxAI(AIPlayer):
+    def __init__(self, gui, number, board, name=AI_NAME, depth=4):
+        """ Initializes an AI profile. """
+        super(AIPlayer, self).__init__(gui, number, board, name)
         self.depth = depth
-        self.name = f"Minimax(depth={depth})"
+        
+    '''def __init__(self, number, board, depth=4):
+        #self.number = number
+        #self.board = board
+        #self.depth = depth
+        #self.name = f"Minimax(depth={depth})"
+        super(AIPlayer, self).__init__(gui, number, board, name)'''
 
     def get_next_move(self):
         # Start the minimax search assuming it's the maximizing player's turn
+        self._think()
         _, move = minimax(self.board, self.depth, True, self.number)
+        #print("MiniMaxAI, mode 1, playing: ", ((6-1) - move)+1)
+        #GUI display
+        self.gameGUI.update_display("MiniMaxAI, mode 1, playing: ", ((6-1) - move)+1)
+        time.sleep(3)
         return move
+
 
