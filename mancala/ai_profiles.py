@@ -1,4 +1,4 @@
-""" Module for Mancala AI Profiles. """
+"""Module for Mancala AI Profiles."""
 
 import copy
 from random import choice
@@ -7,16 +7,18 @@ from mancala.mancala import Player, reverse_index
 from mancala.constants import AI_NAME, P1_PITS, P2_PITS
 from mancala.board import InvalidMove
 
+
 class AIPlayer(Player):
-    """ Base class for an AI Player """
+    """Base class for an AI Player"""
+
     def __init__(self, number, board, name=AI_NAME):
-        """ Initializes an AI profile. """
+        """Initializes an AI profile."""
         super(AIPlayer, self).__init__(number, board, name)
         self.name = "VectorAI"
 
     @property
     def pits(self):
-        """ Shortcut to AI pits. """
+        """Shortcut to AI pits."""
         if self.number == 1:
             return self.board.board[P1_PITS]
         else:
@@ -24,7 +26,7 @@ class AIPlayer(Player):
 
     @property
     def eligible_moves(self):
-        """ Returns a list of integers representing eligible moves. """
+        """Returns a list of integers representing eligible moves."""
         eligible_moves = []
         for i in range(len(self.pits)):
             if not self.pits[i] == 0:
@@ -33,7 +35,7 @@ class AIPlayer(Player):
 
     @property
     def eligible_free_turns(self):
-        """ Returns a list of indexes representing eligible free turns. """
+        """Returns a list of indexes representing eligible free turns."""
 
         free_turn_indices = range(6, 0, -1)
 
@@ -48,26 +50,29 @@ class AIPlayer(Player):
         return elig_free_turns
 
     def _think(self):
-        """ Slight delay for thinking. """
+        """Slight delay for thinking."""
         import time
+
         print("AI is thinking...")
         time.sleep(3)
 
+
 class RandomAI(AIPlayer):
-    """ AI Profile that randomly selects from eligible moves. """
+    """AI Profile that randomly selects from eligible moves."""
 
     def get_next_move(self):
-        """ Returns next AI move based on profile. """
+        """Returns next AI move based on profile."""
 
         self._think()
 
         return choice(self.eligible_moves)
 
+
 class VectorAI(AIPlayer):
-    """ AI Profile using a simple vector decision method. """
+    """AI Profile using a simple vector decision method."""
 
     def get_next_move(self):
-        """ Use an reverse indices vector to optimize for free turns. """
+        """Use an reverse indices vector to optimize for free turns."""
 
         self._think()
 
@@ -88,10 +93,12 @@ class VectorAI(AIPlayer):
         print("VectorAI, mode 3, playing an eligible move.")
         return choice(self.eligible_moves)
 
+
 # Old Eval Function (simple store score comparison only)
 # def evaluate_board(board, player_num):
 #     score1, score2 = board.get_scores()
 #     return score1 - score2 if player_num == 1 else score2 - score1
+
 
 # New Evaluation Function:
 # Adds pit control to scoring and gives higher weight to store points (captures)
@@ -104,8 +111,8 @@ def evaluate_board(board, player_num):
 
     # Calculate score differences from perspective of current player
     if player_num == 1:
-        store_score = score1 - score2       # Difference in captured/store stones
-        side_score = side1 - side2          # Difference in stones still on the board
+        store_score = score1 - score2  # Difference in captured/store stones
+        side_score = side1 - side2  # Difference in stones still on the board
     else:
         store_score = score2 - score1
         side_score = side2 - side1
@@ -133,7 +140,7 @@ def minimax(board, depth, maximizing_player, player_num):
 
     if maximizing_player:
         # Maximize score for current player
-        max_eval = float('-inf')
+        max_eval = float("-inf")
         for move in legal_moves:
             new_board = copy.deepcopy(board)  # Simulate new board state
             try:
@@ -147,7 +154,7 @@ def minimax(board, depth, maximizing_player, player_num):
         return max_eval, best_move
     else:
         # Minimize opponent’s score
-        min_eval = float('inf')
+        min_eval = float("inf")
         for move in legal_moves:
             new_board = copy.deepcopy(board)
             try:
@@ -159,6 +166,31 @@ def minimax(board, depth, maximizing_player, player_num):
                 min_eval = eval_score
                 best_move = move
         return min_eval, best_move
+
+
+class MinimaxUIWrapper(AIPlayer):
+    # Wraps the core MinimaxAI so it is safe to use with the GUI
+    # Attempting to avoid deepcopy() issues by separating the Minimax logic from GUI-linked objects
+
+    def __init__(self, gui, number, board, name="MinimaxUIWrapper"):
+        # Initialize the AIPlayer parent class with these variables
+        super().__init__(number, board, name)
+
+        self.gameGUI = gui
+
+        from mancala.board import Board
+
+        self.minimax_ai = MinimaxAI(number, Board(test_state=board.board), depth=4)
+
+    def get_next_move(self):
+        self.gameGUI.update_display("MinimaxAI is thinking...")
+
+        # Get next move from minimax
+        move = self.minimax_ai.get_next_move()
+
+        self.gameGUI.update_display(f"{self.name} chose move {move}")
+
+        return move
 
 
 # MinimaxAI wrapper:
@@ -174,4 +206,3 @@ class MinimaxAI:
         # Start the minimax search assuming it's the maximizing player's turn
         _, move = minimax(self.board, self.depth, True, self.number)
         return move
-

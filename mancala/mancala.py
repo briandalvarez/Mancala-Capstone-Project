@@ -2,6 +2,7 @@
 
 from mancala.constants import DEFAULT_NAME, P1_PITS, P2_PITS, P1_STORE, P2_STORE
 from mancala.board import Board, InvalidMove
+import time
 
 
 class Player(object):
@@ -104,6 +105,89 @@ class Match(object):
             return True
         else:
             return False
+
+
+class GUIMatch:
+    def __init__(self, gui, player1, player2):
+        self.gameGUI = gui
+        self.board = player1.board
+        self.players = [player1, player2]
+        self.player1 = player1
+        self.player2 = player2
+        self.current_turn = self.player1
+
+    def handle_next_move(self, move=0):
+        self.gameGUI.update_scoreboard(self.board.board_array())
+
+        if self.current_turn == self.player1:
+            self.gameGUI.update_display("Please select your next move!")
+            next_move = move
+
+        elif self.current_turn == self.player2:
+            self.gameGUI.isButtonsActive = False
+            self.gameGUI.update_buttons()
+            self.gameGUI.update_display("AI is thinking...")
+            time.sleep(1)
+            next_move = self.player2.get_next_move()
+            self.gameGUI.update_display(f"AI chose pit {next_move + 1}")
+
+        try:
+            self.board.board, earned_free_move = self.board._move_stones(
+                self.current_turn.number, next_move
+            )
+        except InvalidMove:
+            if self._check_for_winner():
+                return
+            if self.current_turn == self.player1:
+                self.gameGUI.update_display("Choose a pit with stones!")
+            # So the game doesn't accidentally switch turns when player clicks empty pit
+            return
+
+        self.gameGUI.update_scoreboard(self.board.board_array())
+
+        if self._check_for_winner():
+            p1_score = self.board.get_score(1)
+            p2_score = self.board.get_score(2)
+            if p1_score > p2_score:
+                self.gameGUI.update_display("You win!")
+            elif p2_score > p1_score:
+                self.gameGUI.update_display("AI wins!")
+            else:
+                self.gameGUI.update_display("Draw!")
+            return
+
+        if earned_free_move:
+            if self.current_turn == self.player1:
+                return
+            else:
+                time.sleep(0.5)
+                self.handle_next_move()
+        else:
+            self._swap_current_turn()
+
+            if self.current_turn == self.player1:
+                self.gameGUI.isButtonsActive = True
+                self.gameGUI.update_buttons()
+            else:
+                self.gameGUI.isButtonsActive = False
+                self.gameGUI.update_buttons()
+                time.sleep(0.5)
+                self.handle_next_move()
+
+    def _swap_current_turn(self):
+        if self.current_turn == self.player1:
+            self.current_turn = self.player2
+        else:
+            self.current_turn = self.player1
+
+    def _check_for_winner(self):
+        if set(self.board.board[P1_PITS]) == {0}:
+            self.board.board = self.board.gather_remaining(2)
+        elif set(self.board.board[P2_PITS]) == {0}:
+            self.board.board = self.board.gather_remaining(1)
+        else:
+            return False
+        return True
 
 
 class HumanPlayer(Player):
