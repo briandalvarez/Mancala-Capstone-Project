@@ -18,7 +18,7 @@ class InvalidMove(Exception):
 class Board(object):
     """A Mancala board with size pockets per player and stones"""
 
-    def __init__(self, pits=6, stones=4, test_state=None):
+    def __init__(self, gui=None, pits=6, stones=4, test_state=None):
         if test_state:
             self.board = test_state
         else:
@@ -284,3 +284,18 @@ class Board(object):
         else:
             # Invalid player number (should only be 1 or 2)
             return []
+
+    # Creates a copy of current board state
+    def clone(self, include_gui=False):
+        cloned_gui = self.gameGUI if include_gui else None
+        # Create a new Board instance using the same GUI or None
+        new_board = Board(gui=cloned_gui)
+        # Perform a deep copy of the board array to preserve pit values
+        new_board.board = [row[:] for row in self.board]  
+        # Copy current player turn
+        new_board.current_player = getattr(self, 'current_player', None)
+        # Copy any additional stored attributes 
+        if hasattr(self, 'store'):
+            new_board.store = self.store[:]
+        # Return duplicated board object
+        return new_board

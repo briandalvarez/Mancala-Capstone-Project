@@ -123,7 +123,7 @@ def evaluate_board(board, player_num):
 
 # Core Minimax Algorithm:
 # Recursively simulate future moves up to 'depth', evaluating the best move for the current player.
-def minimax(board, depth, maximizing_player, player_num):
+def minimax(board, depth, maximizing_player, player_num, alpha=float('-inf'), beta = float('inf')):
     # Base case: depth limit reached, return evaluation of current board
     if depth == 0:
         return evaluate_board(board, player_num), None
@@ -142,29 +142,35 @@ def minimax(board, depth, maximizing_player, player_num):
         # Maximize score for current player
         max_eval = float("-inf")
         for move in legal_moves:
-            new_board = copy.deepcopy(board)  # Simulate new board state
+            new_board = board.clone(include_gui=False)  # Simulate new board state
             try:
                 new_board.board, _ = new_board._move_stones(current_player, move)
             except InvalidMove:
                 continue
-            eval_score, _ = minimax(new_board, depth - 1, False, player_num)
+            eval_score, _ = minimax(new_board, depth - 1, False, player_num, alpha, beta)
             if eval_score > max_eval:
                 max_eval = eval_score
                 best_move = move
+            alpha = max(alpha, eval_score)
+            if beta <= alpha:
+                break # Prune
         return max_eval, best_move
     else:
         # Minimize opponent’s score
         min_eval = float("inf")
         for move in legal_moves:
-            new_board = copy.deepcopy(board)
+            new_board = board.clone(include_gui=False)
             try:
                 new_board.board, _ = new_board._move_stones(current_player, move)
             except InvalidMove:
                 continue
-            eval_score, _ = minimax(new_board, depth - 1, True, player_num)
+            eval_score, _ = minimax(new_board, depth - 1, True, player_num, alpha, beta)
             if eval_score < min_eval:
                 min_eval = eval_score
                 best_move = move
+            beta = min(beta, eval_score)
+            if beta <= alpha:
+                break # Prune
         return min_eval, best_move
 
 
