@@ -194,7 +194,7 @@ class MinimaxUIWrapper(AIPlayer):
         self.minimax_ai = MinimaxAI(number, Board(test_state=board.board), depth=4)
 
     def get_next_move(self):
-        self.gameGUI.update_display("MinimaxAI is thinking...")
+        self.gameGUI.update_display("AI is thinking...")
 
         # Get next move from minimax
         move = self.minimax_ai.get_next_move()

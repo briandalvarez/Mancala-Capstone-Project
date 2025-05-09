@@ -115,14 +115,19 @@ class GUIMatch:
         self.player1 = player1
         self.player2 = player2
         self.current_turn = self.player1
+        self.awaiting_free_turn = False
 
     def handle_next_move(self, move=0):
         self.gameGUI.update_scoreboard(self.board.board_array())
 
-        if self.current_turn == self.player1:
-            self.gameGUI.update_display("Please select your next move!")
-            next_move = move
 
+        # Player turn logic
+        if self.current_turn == self.player1:
+            if not self.awaiting_free_turn:
+                self.gameGUI.update_display("Please select your next move!")
+            next_move = move
+        
+        # AI turn logic 
         elif self.current_turn == self.player2:
             self.gameGUI.isButtonsActive = False
             self.gameGUI.update_buttons()
@@ -130,6 +135,9 @@ class GUIMatch:
             time.sleep(1)
             next_move = self.player2.get_next_move()
             self.gameGUI.update_display(f"AI chose pit {next_move + 1}")
+            time.sleep(1)
+
+
 
         try:
             self.board.board, earned_free_move = self.board._move_stones(
@@ -158,14 +166,19 @@ class GUIMatch:
 
         if earned_free_move:
             if self.current_turn == self.player1:
+                self.awaiting_free_turn = True
+                self.gameGUI.update_display("Earned free turn!")
+                time.sleep(1.5)
                 return
             else:
-                time.sleep(0.5)
+                self.gameGUI.update_display("AI earned a free move.")
+                time.sleep(1)
                 self.handle_next_move()
         else:
             self._swap_current_turn()
 
             if self.current_turn == self.player1:
+                self.awaiting_free_turn = False
                 self.gameGUI.isButtonsActive = True
                 self.gameGUI.update_buttons()
             else:
