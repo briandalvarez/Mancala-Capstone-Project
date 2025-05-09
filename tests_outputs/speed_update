@@ -1,0 +1,45 @@
+Mancala MinimaxAI Deep Correctness Benchmark
+
+=== Running MinimaxAI at depth 2 ===
+Depth 2 completed. Chosen move: 0
+Time taken: 0.0019 seconds
+Evaluated board states: 12
+Board mutated: NO
+
+=== Running MinimaxAI at depth 4 ===
+Depth 4 completed. Chosen move: 5
+Time taken: 0.0168 seconds
+Evaluated board states: 126
+Board mutated: NO
+
+=== Running MinimaxAI at depth 6 ===
+Depth 6 completed. Chosen move: 5
+Time taken: 0.2427 seconds
+Evaluated board states: 2019
+Board mutated: NO
+
+=== Running MinimaxAI at depth 8 ===
+Depth 8 completed. Chosen move: 3
+Time taken: 3.7389 seconds
+Evaluated board states: 22643
+Board mutated: NO
+
+=== Running MinimaxAI at depth 10 ===
+Depth 10 completed. Chosen move: 5
+Time taken: 62.1155 seconds
+Evaluated board states: 299302
+Board mutated: NO
+
+=== Now running without pruning ===
+
+=== Running MinimaxAI at depth 2 ===
+Depth 2 completed. Chosen move: 0
+Time taken: 0.0003 seconds
+Evaluated board states: 36
+Board mutated: NO
+
+=== Running MinimaxAI at depth 4 ===
+Depth 4 completed. Chosen move: 5
+Time taken: 0.0083 seconds
+Evaluated board states: 1050
+Board mutated: NO

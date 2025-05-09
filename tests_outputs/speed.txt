@@ -1,0 +1,16 @@
+Mancala MinimaxAI Benchmark
+
+=== Running MinimaxAI at depth 2 ===
+Depth 2 completed. Chosen move: 0
+Time taken: 0.0347 seconds
+Evaluated board states: 12
+
+=== Running MinimaxAI at depth 4 ===
+Depth 4 completed. Chosen move: 5
+Time taken: 0.0212 seconds
+Evaluated board states: 126
+
+=== Running MinimaxAI at depth 6 ===
+Depth 6 completed. Chosen move: 5
+Time taken: 0.6088 seconds
+Evaluated board states: 2019

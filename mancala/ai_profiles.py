@@ -7,6 +7,7 @@ from mancala.mancala import Player, reverse_index
 from mancala.constants import AI_NAME, P1_PITS, P2_PITS
 from mancala.board import InvalidMove
 
+eval_counter = {"count": 0}
 
 class AIPlayer(Player):
     """Base class for an AI Player"""
@@ -103,6 +104,7 @@ class VectorAI(AIPlayer):
 # New Evaluation Function:
 # Adds pit control to scoring and gives higher weight to store points (captures)
 def evaluate_board(board, player_num):
+    eval_counter["count"] += 1
     score1, score2 = board.get_scores()
 
     # Sum of stones on each player's side (not store)
@@ -124,6 +126,7 @@ def evaluate_board(board, player_num):
 # Core Minimax Algorithm:
 # Recursively simulate future moves up to 'depth', evaluating the best move for the current player.
 def minimax(board, depth, maximizing_player, player_num, alpha=float('-inf'), beta = float('inf')):
+    print(f"[MINIMAX] Called with depth={depth}, maximizing={maximizing_player}, alpha={alpha}, beta={beta}")
     # Base case: depth limit reached, return evaluation of current board
     if depth == 0:
         return evaluate_board(board, player_num), None
@@ -142,6 +145,7 @@ def minimax(board, depth, maximizing_player, player_num, alpha=float('-inf'), be
         # Maximize score for current player
         max_eval = float("-inf")
         for move in legal_moves:
+            print(f"[MINIMAX] Evaluating move {move} for player {current_player}")
             new_board = board.clone(include_gui=False)  # Simulate new board state
             try:
                 new_board.board, _ = new_board._move_stones(current_player, move)
@@ -159,6 +163,7 @@ def minimax(board, depth, maximizing_player, player_num, alpha=float('-inf'), be
         # Minimize opponent’s score
         min_eval = float("inf")
         for move in legal_moves:
+            print(f"[MINIMAX] Evaluating move {move} for player {current_player}")
             new_board = board.clone(include_gui=False)
             try:
                 new_board.board, _ = new_board._move_stones(current_player, move)
@@ -202,7 +207,7 @@ class MinimaxUIWrapper(AIPlayer):
 # MinimaxAI wrapper:
 # Uses the minimax algorithm to determine and return the best next move.
 class MinimaxAI:
-    def __init__(self, number, board, depth=4):
+    def __init__(self, number, board, depth=6):
         self.number = number
         self.board = board
         self.depth = depth
@@ -210,5 +215,5 @@ class MinimaxAI:
 
     def get_next_move(self):
         # Start the minimax search assuming it's the maximizing player's turn
-        _, move = minimax(self.board, self.depth, True, self.number)
+        _, move = minimax(self.board, self.depth, True, self.number,alpha=float('-inf'), beta=float('inf'))
         return move

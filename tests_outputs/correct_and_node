@@ -1,0 +1,8 @@
+Correctness and Node Count Test Results
+Correctness Test - Selected move: 0
+
+=== Node Count by Depth (Pruned) ===
+Depth 2: 43 evaluations in 0.00 sec
+Depth 4: 126 evaluations in 0.02 sec
+Depth 6: 2019 evaluations in 0.33 sec
+Depth 8: 22643 evaluations in 4.49 sec
