@@ -1,22 +1,19 @@
-"""Module for Mancala Board class."""
+""" Module for Mancala Board class. """
 
 from mancala.constants import P1_PITS, P1_STORE, P2_PITS, P2_STORE, REVERSE_INDEX
-
+import time
 
 class InvalidBoardArea(Exception):
-    """Exception flagged when moves are attempted on an unknown area."""
-
+    """ Exception flagged when moves are attempted on an unknown area. """
     pass
 
-
 class InvalidMove(Exception):
-    """Exception flagged when no stones are available at given index."""
-
+    """ Exception flagged when no stones are available at given index. """
     pass
 
 
 class Board(object):
-    """A Mancala board with size pockets per player and stones"""
+    """ A Mancala board with size pockets per player and stones """
 
     def __init__(self, gui=None, pits=6, stones=4, test_state=None):
         if test_state:
@@ -25,7 +22,7 @@ class Board(object):
             self.board = [[stones] * pits, [0], [stones] * pits, [0]]
 
     def textify_board(self):
-        """Returns the current board as a printable string to show the user.
+        """ Returns the current board as a printable string to show the user.
 
         Note that the order of player 2 pits are displayed in reverse
         from the list index to give the appearance of a loop.
@@ -73,7 +70,7 @@ class Board(object):
         ]
 
     def _move_stones(self, player_num, start_index):
-        """Moves stones by the Player associated with player_num,
+        """ Moves stones by the Player associated with player_num,
         starting at the given index.
 
         Returns: new state of Board.board, earned_free_move (bool)
@@ -130,28 +127,27 @@ class Board(object):
         return self.board, earned_free_move
 
     def _earned_free_move(self, player_num, last_area):
-        """Checks whether a free move was earned."""
+        """ Checks whether a free move was earned. """
         if player_num == 1 and last_area == P1_STORE:
-            # remove comment - used for debugging tests
+            # TODO - remove comment - used for debugging tests
             # print("Earned free move!")
             return True
         elif player_num == 2 and last_area == P2_STORE:
-            # remove comment - used for debugging tests
+            # TODO - remove comment - used for debugging tests
             # print("Earned free move!")
             return True
         else:
             return False
 
     def _earned_capture(self, player_num, last_area, last_index):
-        """Checks whether the last move earned a capture.
+        """ Checks whether the last move earned a capture.
 
         last_area: integer associated with last board area
         last_index: integer of the last move's index
         """
 
         opposing_area, opposing_index = self._get_opposing_area_and_index(
-            last_area, last_index
-        )
+            last_area, last_index)
 
         # Check whether last move was in Player's own pits.
         if player_num == 1:
@@ -176,7 +172,7 @@ class Board(object):
             return True
 
     def _process_capture(self, last_area, last_index):
-        """Processes capture by moving stones to the player's store."""
+        """ Processes capture by moving stones to the player's store. """
 
         if last_area == P1_PITS:
             destination_store = P1_STORE
@@ -184,8 +180,7 @@ class Board(object):
             destination_store = P2_STORE
 
         opposing_area, opposing_index = self._get_opposing_area_and_index(
-            last_area, last_index
-        )
+            last_area, last_index)
 
         captured_stones = self.board[opposing_area][opposing_index]
         # TODO - remove comment - used for debugging tests
@@ -202,11 +197,11 @@ class Board(object):
         return self.board
 
     def gather_remaining(self, player_num):
-        """Gathers stones from remaining_area and deposits
+        """ Gathers stones from remaining_area and deposits
         in the associated player's store. (when game is finished)
 
         Returns finished Board.board state."""
-
+        
         if player_num == 1:
             remaining_area = P1_PITS
             destination_store = P1_STORE
@@ -226,10 +221,10 @@ class Board(object):
         return self.board
 
     def _get_opposing_area_and_index(self, orig_area, index):
-        """Returns opposing_area, opposing_index
+        """ Returns opposing_area, opposing_index
 
         Optionally returns as tuple for assertion testing.
-        """
+         """
 
         if orig_area == P1_PITS:
             opposing_area = P2_PITS
@@ -247,7 +242,7 @@ class Board(object):
         return opposing_area, opposing_index
 
     def _get_next_area(self, current_area):
-        """Given a current area of transaction, gives the next area."""
+        """ Given a current area of transaction, gives the next area. """
         if current_area == P1_PITS:
             return P1_STORE
         elif current_area == P1_STORE:
@@ -260,14 +255,14 @@ class Board(object):
             raise InvalidBoardArea
 
     def get_score(self, player_num):
-        """Returns score for player_num."""
+        """ Returns score for player_num. """
         if player_num == 1:
             return self.board[1][0]
         else:
             return self.board[3][0]
 
     def get_scores(self):
-        """Returns both scores as a tuple."""
+        """ Returns both scores as a tuple. """
         return (self.board[1][0], self.board[3][0])
 
     def legal_moves(self, player_num):
@@ -291,10 +286,10 @@ class Board(object):
         # Create a new Board instance using the same GUI or None
         new_board = Board(gui=cloned_gui)
         # Perform a deep copy of the board array to preserve pit values
-        new_board.board = [row[:] for row in self.board]  
+        new_board.board = [row[:] for row in self.board]
         # Copy current player turn
         new_board.current_player = getattr(self, 'current_player', None)
-        # Copy any additional stored attributes 
+        # Copy any additional stored attributes
         if hasattr(self, 'store'):
             new_board.store = self.store[:]
         # Return duplicated board object

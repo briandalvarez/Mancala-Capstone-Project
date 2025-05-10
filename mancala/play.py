@@ -9,7 +9,7 @@ def main():
     # match = Match(player1_type=HumanPlayer, player2_type=VectorAI)
 
     # Play against the MinMaxAI (Human vs. MinMaxAI)
-    match = Match(player1_type=HumanPlayer, player2_type=lambda: MinimaxAI(depth=4))
+    match = Match(player1_type=HumanPlayer, player2_type=lambda n, b: MinimaxAI(n, b, depth=4))
 
     match.handle_next_move()
 

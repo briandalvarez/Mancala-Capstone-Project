@@ -1,11 +1,11 @@
-"""Module for Mancala AI Profiles."""
+""" Module for Mancala AI Profiles. """
 
-import copy
+import copy, time
 from random import choice
 
+from mancala.board import InvalidMove
 from mancala.mancala import Player, reverse_index
 from mancala.constants import AI_NAME, P1_PITS, P2_PITS
-from mancala.board import InvalidMove
 
 eval_counter = {"count": 0}
 
@@ -19,7 +19,7 @@ class AIPlayer(Player):
 
     @property
     def pits(self):
-        """Shortcut to AI pits."""
+        """ Shortcut to AI pits. """
         if self.number == 1:
             return self.board.board[P1_PITS]
         else:
@@ -27,7 +27,7 @@ class AIPlayer(Player):
 
     @property
     def eligible_moves(self):
-        """Returns a list of integers representing eligible moves."""
+        """ Returns a list of integers representing eligible moves. """
         eligible_moves = []
         for i in range(len(self.pits)):
             if not self.pits[i] == 0:
@@ -36,7 +36,7 @@ class AIPlayer(Player):
 
     @property
     def eligible_free_turns(self):
-        """Returns a list of indexes representing eligible free turns."""
+        """ Returns a list of indexes representing eligible free turns. """
 
         free_turn_indices = range(6, 0, -1)
 
@@ -51,29 +51,27 @@ class AIPlayer(Player):
         return elig_free_turns
 
     def _think(self):
-        """Slight delay for thinking."""
+        """ Slight delay for thinking. """
         import time
 
         print("AI is thinking...")
         time.sleep(3)
 
-
 class RandomAI(AIPlayer):
-    """AI Profile that randomly selects from eligible moves."""
+    """ AI Profile that randomly selects from eligible moves. """
 
     def get_next_move(self):
-        """Returns next AI move based on profile."""
+        """ Returns next AI move based on profile. """
 
         self._think()
 
         return choice(self.eligible_moves)
 
-
 class VectorAI(AIPlayer):
-    """AI Profile using a simple vector decision method."""
+    """ AI Profile using a simple vector decision method. """
 
     def get_next_move(self):
-        """Use an reverse indices vector to optimize for free turns."""
+        """ Use an reverse indices vector to optimize for free turns. """
 
         self._think()
 
@@ -113,8 +111,8 @@ def evaluate_board(board, player_num):
 
     # Calculate score differences from perspective of current player
     if player_num == 1:
-        store_score = score1 - score2  # Difference in captured/store stones
-        side_score = side1 - side2  # Difference in stones still on the board
+        store_score = score1 - score2       # Difference in captured/store stones
+        side_score = side1 - side2          # Difference in stones still on the board
     else:
         store_score = score2 - score1
         side_score = side2 - side1
@@ -217,3 +215,4 @@ class MinimaxAI:
         # Start the minimax search assuming it's the maximizing player's turn
         _, move = minimax(self.board, self.depth, True, self.number,alpha=float('-inf'), beta=float('inf'))
         return move
+
