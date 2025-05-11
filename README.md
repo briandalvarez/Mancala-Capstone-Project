@@ -1,7 +1,9 @@
 # Mancala-Capstone-Project
 CPSC 481 capstone: AI agent vs human opponent Mancala game with GUI
 
-## Assets
+## Assets  
+- *PIXEL_FONT.ttf*
+  - This file contains the font used in our GUI
 
 ## Images
 
