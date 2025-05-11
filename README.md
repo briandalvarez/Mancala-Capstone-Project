@@ -6,6 +6,14 @@ CPSC 481 capstone: AI agent vs human opponent Mancala game with GUI
 This file contains the font used in our GUI
 
 ## Images
+*active_player.png*  
+*green_star.png*  
+*inactive_player.png*  
+*mancalaboard.png*  
+*pink_star.png*  
+*purple_star.png*  
+*spacebackground.jpeg*  
+*yellow_star.png*
 
 ## Mancala
 
