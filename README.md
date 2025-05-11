@@ -14,6 +14,7 @@ This file contains the font used in our GUI.
 *purple_star.png*  
 *spacebackground.jpeg*  
 *yellow_star.png*  
+
 This folder contains the image files used in the background of the GUI game screen and the image used for the mancala board.
 
 ## Mancala  
