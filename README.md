@@ -15,7 +15,7 @@ This file contains the font used in our GUI.
 *spacebackground.jpeg*  
 *yellow_star.png*  
 
-This folder contains the image files used in the background of the GUI game screen and the image used for the mancala board.
+This folder contains the image files used in the background of our GUI game screen and the image used for the mancala board.
 
 ## Mancala  
 *__init__.py*  
@@ -26,9 +26,23 @@ This folder contains the image files used in the background of the GUI game scre
 *mancala.py*  
 *play.py*
 
-## Tests
+## Tests  
+_init_.py  
+test_ai.py  
+test_ai_vs_ai_simulation.py  
+test_board.py  
+test_match.py  
+test_minimax_ai.py  
+test_minimax_correctness_and_nodes.py  
+test_minimax_speed.py  
+test_player.py
 
 ## Tests_outputs
+*_init_.py*  
+*ai_vs_ai_simulation.txt*  
+*correct_and_node*  
+*speed.txt*  
+*speed_update*
 
 **.gitignore**  
 
