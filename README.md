@@ -40,8 +40,13 @@ This file was the main file of the original repository(where the project was run
 
 ## Tests  
 *_init_.py*  
+
 *test_ai.py*  
+This file is empty.  
+
 *test_ai_vs_ai_simulation.py*  
+This file contains the a simulate function that simulates a match between to AIs.  
+
 *test_board.py*  
 *test_match.py*  
 *test_minimax_ai.py*  
