@@ -48,11 +48,25 @@ This file is empty.
 This file contains the a simulate function that simulates a match between to AIs.  
 
 *test_board.py*  
+This file contains tests for Mancala board functions.  
+
+*test_mass_ai_vs_ai_results.py*  
+This file runs match mass simmulations between two AIs and stores/organizes the winners, number of moves made per game, and game durations in excel files.  
+
 *test_match.py*  
+This file contains tests Mancala Match functions.  
+
 *test_minimax_ai.py*  
+This file plays a simulated match between Minimax and VectorAI.  
+
 *test_minimax_correctness_and_nodes.py*  
+This file tests for MiniMaxAI moves for correctness.  
+
 *test_minimax_speed.py*  
-*test_player.py*
+This file tests the speed of MiniMaxAI at various depth and with or without pruning.  
+
+*test_player.py*  
+This file tset for the correct assignment of player names and the amount of players created.
 
 ## Tests_outputs
 *_init_.py*  
