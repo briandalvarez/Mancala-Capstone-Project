@@ -19,6 +19,7 @@ This folder contains the image files used in the background of our GUI game scre
 
 ## Mancala  
 *__init__.py*  
+
 *ai_profiles.py*  
 This file contains the previously existing AI players VectorAI and RandomAI(as well as the supporting class of AIPlayer), as well as our evaluation function, minimax algorithm, and MiniMaxAI class.  
 
@@ -32,8 +33,10 @@ This files contains constant variables that are used throughout the project.
 This file contains our GUI and gameGUI class.This is the file that our projects main file(from where our program is run), and is run with the **python -m mancala.gui_play** command.  
 
 *mancala.py*  
-This file contains
-*play.py*
+This file contains the previously existing match class that contains the game playthrough logic, as well as the Player class which acts as a parent class to the HumanPlayer, VectorAI and RandomAI classes.  
+
+*play.py*  
+This file was the main file of the original repository(where the project was run from).
 
 ## Tests  
 *_init_.py*  
