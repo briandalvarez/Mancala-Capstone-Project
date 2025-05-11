@@ -85,8 +85,11 @@ This contains more results of test_minimax_speed.py.
 **.gitignore**  
 
 **README.md**  
+This file is this README.md
 
 **__init__.py**  
 
 **test_minimax_ai_temp_root.py**  
+This file plays a simulated match between Minimax and VectorAI.  
+
 
