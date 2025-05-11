@@ -3,7 +3,7 @@ CPSC 481 capstone: AI agent vs human opponent Mancala game with GUI
 
 ## Assets  
 - *PIXEL_FONT.ttf*
-  - This file contains the font used in our GUI
+  * This file contains the font used in our GUI
 
 ## Images
 
