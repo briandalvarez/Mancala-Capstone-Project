@@ -26,8 +26,13 @@ This file contains the previously existing AI players VectorAI and RandomAI(as w
 This file contains the previously existing board class that handles all board changes and board logic.  
 
 *constants.py*  
+This files contains constant variables that are used throughout the project.  
+
 *gui_play.py*  
+This file contains our GUI and gameGUI class.This is the file that our projects main file(from where our program is run), and is run with the **python -m mancala.gui_play** command.  
+
 *mancala.py*  
+This file contains
 *play.py*
 
 ## Tests  
