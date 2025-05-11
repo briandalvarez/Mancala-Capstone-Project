@@ -11,7 +11,11 @@ CPSC 481 capstone: AI agent vs human opponent Mancala game with GUI
 
 ## Tests_outputs
 
-**.gitignore**
-**README.md**
-**__init__.py**
-**test_minimax_ai_temp_root.py**
+**.gitignore**  
+
+**README.md**  
+
+**__init__.py**  
+
+**test_minimax_ai_temp_root.py**  
+
