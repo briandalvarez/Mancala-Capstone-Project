@@ -3,7 +3,7 @@ CPSC 481 capstone: AI agent vs human opponent Mancala game with GUI
 
 ## Assets  
 *PIXEL_FONT.ttf*  
-This file contains the font used in our GUI
+This file contains the font used in our GUI.
 
 ## Images
 *active_player.png*  
@@ -13,9 +13,17 @@ This file contains the font used in our GUI
 *pink_star.png*  
 *purple_star.png*  
 *spacebackground.jpeg*  
-*yellow_star.png*
+*yellow_star.png*  
+This folder contains the image files used in the background of the GUI game screen and the image used for the mancala board.
 
-## Mancala
+## Mancala  
+*__init__.py*  
+*ai_profiles.py*  
+*board.py*  
+*constants.py*  
+*gui_play.py*  
+*mancala.py*  
+*play.py*
 
 ## Tests
 
