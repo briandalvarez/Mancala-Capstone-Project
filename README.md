@@ -66,14 +66,21 @@ This file tests for MiniMaxAI moves for correctness.
 This file tests the speed of MiniMaxAI at various depth and with or without pruning.  
 
 *test_player.py*  
-This file tset for the correct assignment of player names and the amount of players created.
+This file tests for the correct assignment of player names and the amount of players created.
 
 ## Tests_outputs
 *_init_.py*  
+
 *ai_vs_ai_simulation.txt*  
+This file contains the text virtualization of the match played by test_ai_vs_ai_simulation.py.  
+
 *correct_and_node*  
+This file contains the correctness and node count test results
 *speed.txt*  
-*speed_update*
+This contains the results of test_minimax_speed.py.  
+
+*speed_update*  
+This contains more results of test_minimax_speed.py.  
 
 **.gitignore**  
 
