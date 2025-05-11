@@ -20,22 +20,26 @@ This folder contains the image files used in the background of our GUI game scre
 ## Mancala  
 *__init__.py*  
 *ai_profiles.py*  
+This file contains the previously existing AI players VectorAI and RandomAI(as well as the supporting class of AIPlayer), as well as our evaluation function, minimax algorithm, and MiniMaxAI class.  
+
 *board.py*  
+This file contains the previously existing board class that handles all board changes and board logic.  
+
 *constants.py*  
 *gui_play.py*  
 *mancala.py*  
 *play.py*
 
 ## Tests  
-_init_.py  
-test_ai.py  
-test_ai_vs_ai_simulation.py  
-test_board.py  
-test_match.py  
-test_minimax_ai.py  
-test_minimax_correctness_and_nodes.py  
-test_minimax_speed.py  
-test_player.py
+*_init_.py*  
+*test_ai.py*  
+*test_ai_vs_ai_simulation.py*  
+*test_board.py*  
+*test_match.py*  
+*test_minimax_ai.py*  
+*test_minimax_correctness_and_nodes.py*  
+*test_minimax_speed.py*  
+*test_player.py*
 
 ## Tests_outputs
 *_init_.py*  
